@@ -19,6 +19,7 @@ nbproject
 .DS_Store
 
 #ignora i seguenti eseguibili
+examples/trim/trim
 
 *.cgi
 *.fcgi
