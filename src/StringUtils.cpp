@@ -212,3 +212,39 @@ string StringUtils::lastURIPath(string uri)
 			return lastURIPath.substr(0, startParameterIndex);
 	}
 }
+
+string StringUtils::u32ToUtf8(const u32string &in)
+{
+	return string(in.begin(), in.end());
+	/*
+	wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
+	return conv.to_bytes(in);
+	*/
+}
+
+u32string StringUtils::utf8ToU32(const string &in)
+{
+	return u32string(in.begin(), in.end());
+	/*
+	wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
+	return conv.from_bytes(in);
+	*/
+}
+
+string StringUtils::u16ToUtf8(const u16string &in)
+{
+	return string(in.begin(), in.end());
+	/*
+	wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
+	return conv.to_bytes(in);
+	*/
+}
+
+u16string StringUtils::utf8ToU16(const string &in)
+{
+	return u16string(in.begin(), in.end());
+	/*
+	wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
+	return conv.from_bytes(in);
+	*/
+}

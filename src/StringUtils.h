@@ -18,42 +18,49 @@
 
 using namespace std;
 
-class StringUtils {
+class StringUtils
+{
 
-public:
-  static string ltrim(string s);
-  static string rtrim(string s);
-  static string trim(string s);
+  public:
+	static string ltrim(string s);
+	static string rtrim(string s);
+	static string trim(string s);
 
-  static string ltrimNewLineToo(string s);
-  static string rtrimNewLineToo(string s);
-  static string trimNewLineToo(string s);
+	static string ltrimNewLineToo(string s);
+	static string rtrimNewLineToo(string s);
+	static string trimNewLineToo(string s);
 
-  static string ltrimTabToo(string s);
-  static string rtrimTabToo(string s);
-  static string trimTabToo(string s);
+	static string ltrimTabToo(string s);
+	static string rtrimTabToo(string s);
+	static string trimTabToo(string s);
 
-  static string ltrimNewLineAndTabToo(string s);
-  static string rtrimNewLineAndTabToo(string s);
-  static string trimNewLineAndTabToo(string s);
+	static string ltrimNewLineAndTabToo(string s);
+	static string rtrimNewLineAndTabToo(string s);
+	static string trimNewLineAndTabToo(string s);
 
-  static string lowerCase(const string &str);
+	static string lowerCase(const string &str);
 
-  static bool isNumber(string text);
+	static bool isNumber(string text);
 
-  static bool equalCaseInsensitive(const string s1, const string s2);
+	static bool equalCaseInsensitive(const string s1, const string s2);
 
-  // conta quante volte abbiamo pat in txt usando l'algoritmo KMP
-  // Time Complexity: O(M + N)
-  // Auxiliary Space: O(M) As an array of size M is used to store the longest
-  // prefix suffix values for the pattern.
-  static int kmpSearch(string pat, string txt);
+	// conta quante volte abbiamo pat in txt usando l'algoritmo KMP
+	// Time Complexity: O(M + N)
+	// Auxiliary Space: O(M) As an array of size M is used to store the longest
+	// prefix suffix values for the pattern.
+	static int kmpSearch(string pat, string txt);
 
-  string lastURIPath(string uri);
+	string lastURIPath(string uri);
 
-private:
-  // usato da kmpSearch
-  static void computeLPSArray(string pat, int M, int lps[]);
+	static string u16ToUtf8(const u16string &in);
+	static u16string utf8ToU16(const string &in);
+
+	static string u32ToUtf8(const u32string &in);
+	static u32string utf8ToU32(const string &in);
+
+  private:
+	// usato da kmpSearch
+	static void computeLPSArray(string pat, int M, int lps[]);
 };
 
 #endif
