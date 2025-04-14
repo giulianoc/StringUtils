@@ -30,12 +30,6 @@ SET (HEADERS
 
 add_library (StringUtils SHARED ${SOURCES} ${HEADERS})
 
-if (ZORAC)
-	install(TARGETS StringUtils DESTINATION services/cms-import)
-	install(TARGETS StringUtils DESTINATION services/cms-pusher)
-	install(TARGETS StringUtils DESTINATION services/cms-getter)
-else()
-	install (TARGETS StringUtils DESTINATION lib)
-	install (FILES ${HEADERS} DESTINATION include)
-endif()
+install (TARGETS StringUtils DESTINATION lib)
+install (FILES ${HEADERS} DESTINATION include)
 
