@@ -50,7 +50,7 @@ class StringUtils
 	// prefix suffix values for the pattern.
 	static int kmpSearch(string pat, string txt);
 
-	string lastURIPath(string uri);
+	static string lastURIPath(string uri);
 
 	static string u16ToUtf8(const u16string &in);
 	static u16string utf8ToU16(const string &in);
