@@ -40,8 +40,6 @@ add_compile_options(-D_REENTRANT)
 
 add_executable(trim ${SOURCES} ${HEADERS})
 
-target_link_libraries (trim Tools)
-target_link_libraries (trim ErrMsg)
 target_link_libraries (trim crypto)
 if(CRYPTO_FOUND)
 	if (APPLE)
