@@ -51,6 +51,7 @@ class StringUtils
 	static int kmpSearch(string pat, string txt);
 
 	static string lastURIPath(string uri);
+	static string uriPathPrefix(string uri, bool errorIfMissing = false);
 
 	static string u16ToUtf8(const u16string &in);
 	static u16string utf8ToU16(const string &in);

@@ -13,7 +13,9 @@
 
 #include "StringUtils.h"
 #include <algorithm>
+#include <format>
 #include <locale>
+// #include <stdexcept>
 
 string StringUtils::ltrim(string s)
 {
@@ -211,6 +213,23 @@ string StringUtils::lastURIPath(string uri)
 		else
 			return lastURIPath.substr(0, startParameterIndex);
 	}
+}
+
+string StringUtils::uriPathPrefix(string uri, bool errorIfMissing)
+{
+	size_t lastSlashIndex = uri.find_last_of('/');
+	if (lastSlashIndex == string::npos)
+	{
+		if (errorIfMissing)
+			throw runtime_error(std::format(
+				"No uriPathPrefix found"
+				", uri: {}",
+				uri
+			));
+		else
+			return "";
+	}
+	return uri.substr(0, lastSlashIndex);
 }
 
 string StringUtils::u32ToUtf8(const u32string &in)
