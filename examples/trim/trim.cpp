@@ -1,10 +1,10 @@
 /*
- Copyright (C) Giuliano Catrambone (giuliano.catrambone@catrasoftware.it)
+ Copyright (C) Giuliano Catrambone (giulianocatrambone@gmail.com)
 
- This program is free software; you can redistribute it and/or 
- modify it under the terms of the GNU General Public License 
- as published by the Free Software Foundation; either 
- version 2 of the License, or (at your option) any later 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later
  version.
 
  This program is distributed in the hope that it will be useful,
@@ -24,30 +24,27 @@
 #include "StringUtils.h"
 #include <iostream>
 #ifdef WIN32
-	#include <windows.h>
+#include <windows.h>
 #else
-	#include <unistd.h>
+#include <unistd.h>
 #endif
 
-
-int main ()
+int main()
 
 {
 
 	{
-		string					str("  1234\n   ");
+		string str("  1234\n   ");
 
 		str = StringUtils::trim(str);
-		std:: cout << "trim: '" << str << "'" << std:: endl;
+		std::cout << "trim: '" << str << "'" << std::endl;
 	}
 	{
-		string					str("  1234\n   ");
+		string str("  1234\n   ");
 
 		str = StringUtils::trimNewLineToo(str);
-		std:: cout << "trimNewLineToo: '" << str << "'" << std:: endl;
+		std::cout << "trimNewLineToo: '" << str << "'" << std::endl;
 	}
-
 
 	return 0;
 }
-
