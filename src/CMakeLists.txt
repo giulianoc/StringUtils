@@ -28,6 +28,11 @@ SET (HEADERS
 	StringUtils.h
 )
 
+if(STRINGUTILS_UTFCPP)
+	add_compile_options(-DUTFCPP)
+  include_directories("${UTFCPP_INCLUDE_DIR}")
+endif()
+
 add_library (StringUtils SHARED ${SOURCES} ${HEADERS})
 
 if(ZORAC)
