@@ -15,7 +15,9 @@
 #include <algorithm>
 #include <format>
 #include <locale>
-// #include <stdexcept>
+#ifdef UTFCPP
+#include <utf8.h>
+#endif
 
 string StringUtils::ltrim(string s)
 {
@@ -113,9 +115,13 @@ int StringUtils::kmpSearch(string pat, string txt)
 	int M = pat.length();
 	int N = txt.length();
 
-	// Create lps[] that will hold the longest
-	// prefix suffix values for pattern
+// Create lps[] that will hold the longest
+// prefix suffix values for pattern
+#ifdef _WIN32
+	int *lps = new int[M];
+#else
 	int lps[M];
+#endif
 	int j = 0; // index for pat[]
 
 	// Preprocess the pattern (calculate lps[]
@@ -155,6 +161,9 @@ int StringUtils::kmpSearch(string pat, string txt)
 				i = i + 1;
 		}
 	}
+#ifdef _WIN32
+	delete[] lps;
+#endif
 	return res;
 }
 
@@ -232,9 +241,18 @@ string StringUtils::uriPathPrefix(string uri, bool errorIfMissing)
 	return uri.substr(0, lastSlashIndex);
 }
 
+#ifdef UTFCPP
 string StringUtils::u32ToUtf8(const u32string &in)
 {
-	return string(in.begin(), in.end());
+	// tenta di costruire una std::string da caratteri char32_t (Unicode code points a 32 bit), ma std::string è fatta per char (8 bit).
+	// Questo codice non effettua una conversione UTF-32 → UTF-8, ma semplicemente copia i byte più bassi di ogni char32_t, con risultati non validi
+	// return string(in.begin(), in.end());
+
+	// Attualmente lo standard non prevede questa conversione, bisogna quindi usare una libreria esterna come
+	// utfcpp semplice e leggera
+	string out;
+	utf8::utf32to8(in.begin(), in.end(), std::back_inserter(out));
+	return out;
 	/*
 	wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
 	return conv.to_bytes(in);
@@ -243,7 +261,12 @@ string StringUtils::u32ToUtf8(const u32string &in)
 
 u32string StringUtils::utf8ToU32(const string &in)
 {
-	return u32string(in.begin(), in.end());
+	// sbagliato, vedi commento sopra
+	// return u32string(in.begin(), in.end());
+
+	std::u32string out;
+	utf8::utf8to32(in.begin(), in.end(), std::back_inserter(out));
+	return out;
 	/*
 	wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
 	return conv.from_bytes(in);
@@ -252,7 +275,12 @@ u32string StringUtils::utf8ToU32(const string &in)
 
 string StringUtils::u16ToUtf8(const u16string &in)
 {
-	return string(in.begin(), in.end());
+	// sbagliato, vedi commento sopra
+	// return string(in.begin(), in.end());
+
+	std::string out;
+	utf8::utf16to8(in.begin(), in.end(), std::back_inserter(out));
+	return out;
 	/*
 	wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
 	return conv.to_bytes(in);
@@ -261,9 +289,15 @@ string StringUtils::u16ToUtf8(const u16string &in)
 
 u16string StringUtils::utf8ToU16(const string &in)
 {
+	// sbagliato, vedi commento sopra
 	return u16string(in.begin(), in.end());
+
+	std::u16string out;
+	utf8::utf8to16(in.begin(), in.end(), std::back_inserter(out));
+	return out;
 	/*
 	wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
 	return conv.from_bytes(in);
 	*/
 }
+#endif

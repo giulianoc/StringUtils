@@ -53,11 +53,13 @@ class StringUtils
 	static string lastURIPath(string uri);
 	static string uriPathPrefix(string uri, bool errorIfMissing = false);
 
+#ifdef UTFCPP
 	static string u16ToUtf8(const u16string &in);
 	static u16string utf8ToU16(const string &in);
 
 	static string u32ToUtf8(const u32string &in);
 	static u32string utf8ToU32(const string &in);
+#endif
 
   private:
 	// usato da kmpSearch
