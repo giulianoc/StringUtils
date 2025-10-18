@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <format>
 #include <locale>
+#include <utility>
 #ifdef UTFCPP
 #include <utf8.h>
 #endif
@@ -35,11 +36,11 @@ string StringUtils::rtrim(string s)
 	return s;
 }
 
-string StringUtils::trim(string s) { return ltrim(rtrim(s)); }
+string StringUtils::trim(string s) { return ltrim(rtrim(std::move(s))); }
 
 string StringUtils::ltrimNewLineToo(string s)
 {
-	auto it = find_if(s.begin(), s.end(), [](char c) { return !isspace<char>(c, locale::classic()) && c != '\n'; });
+	auto it = ranges::find_if(s, [](char c) { return !isspace<char>(c, locale::classic()) && c != '\n'; });
 	s.erase(s.begin(), it);
 
 	return s;
@@ -53,11 +54,11 @@ string StringUtils::rtrimNewLineToo(string s)
 	return s;
 }
 
-string StringUtils::trimNewLineToo(string s) { return ltrimNewLineToo(rtrimNewLineToo(s)); }
+string StringUtils::trimNewLineToo(string s) { return ltrimNewLineToo(rtrimNewLineToo(std::move(s))); }
 
 string StringUtils::ltrimTabToo(string s)
 {
-	auto it = find_if(s.begin(), s.end(), [](char c) { return !isspace<char>(c, locale::classic()) && c != '\t'; });
+	auto it = ranges::find_if(s, [](char c) { return !isspace<char>(c, locale::classic()) && c != '\t'; });
 	s.erase(s.begin(), it);
 
 	return s;
@@ -71,11 +72,11 @@ string StringUtils::rtrimTabToo(string s)
 	return s;
 }
 
-string StringUtils::trimTabToo(string s) { return ltrimTabToo(rtrimTabToo(s)); }
+string StringUtils::trimTabToo(string s) { return ltrimTabToo(rtrimTabToo(std::move(s))); }
 
 string StringUtils::ltrimNewLineAndTabToo(string s)
 {
-	auto it = find_if(s.begin(), s.end(), [](char c) { return !isspace<char>(c, locale::classic()) && c != '\n' && c != '\t'; });
+	auto it = ranges::find_if(s, [](char c) { return !isspace<char>(c, locale::classic()) && c != '\n' && c != '\t'; });
 	s.erase(s.begin(), it);
 
 	return s;
@@ -89,7 +90,7 @@ string StringUtils::rtrimNewLineAndTabToo(string s)
 	return s;
 }
 
-string StringUtils::trimNewLineAndTabToo(string s) { return ltrimNewLineAndTabToo(rtrimNewLineToo(s)); }
+string StringUtils::trimNewLineAndTabToo(string s) { return ltrimNewLineAndTabToo(rtrimNewLineToo(std::move(s))); }
 
 string StringUtils::lowerCase(const string &str)
 {
@@ -105,7 +106,7 @@ bool StringUtils::isNumber(string text)
 	return !text.empty() && ranges::find_if(text.begin(), text.end(), [](unsigned char c) { return !isdigit(c); }) == text.end();
 }
 
-bool StringUtils::equalCaseInsensitive(const string s1, const string s2)
+bool StringUtils::equalCaseInsensitive(const string& s1, const string& s2)
 {
 	return s1.length() != s2.length() ? false : equal(s1.begin(), s1.end(), s2.begin(), [](int c1, int c2) { return toupper(c1) == toupper(c2); });
 }
@@ -208,7 +209,7 @@ void StringUtils::computeLPSArray(string pat, int M, int lps[])
 	}
 }
 
-string StringUtils::lastURIPath(string uri)
+string StringUtils::lastURIPath(const string& uri)
 {
 	size_t lastSlashIndex = uri.find_last_of('/');
 	if (lastSlashIndex == string::npos)
@@ -290,11 +291,13 @@ string StringUtils::u16ToUtf8(const u16string &in)
 u16string StringUtils::utf8ToU16(const string &in)
 {
 	// sbagliato, vedi commento sopra
-	return u16string(in.begin(), in.end());
+	return {in.begin(), in.end()};
 
+	/*
 	std::u16string out;
 	utf8::utf8to16(in.begin(), in.end(), std::back_inserter(out));
 	return out;
+	*/
 	/*
 	wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
 	return conv.from_bytes(in);

@@ -42,7 +42,7 @@ class StringUtils
 
 	static bool isNumber(string text);
 
-	static bool equalCaseInsensitive(const string s1, const string s2);
+	static bool equalCaseInsensitive(const string &s1, const string &s2);
 
 	// conta quante volte abbiamo pat in txt usando l'algoritmo KMP
 	// Time Complexity: O(M + N)
@@ -50,7 +50,7 @@ class StringUtils
 	// prefix suffix values for the pattern.
 	static int kmpSearch(string pat, string txt);
 
-	static string lastURIPath(string uri);
+	static string lastURIPath(const string &uri);
 	static string uriPathPrefix(string uri, bool errorIfMissing = false);
 
 #ifdef UTFCPP
