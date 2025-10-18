@@ -15,10 +15,12 @@
 #include <algorithm>
 #include <format>
 #include <locale>
+#include <regex>
 #include <utility>
 #ifdef UTFCPP
-#include <utf8.h>
+	#include <utf8.h>
 #endif
+
 
 string StringUtils::ltrim(string s)
 {
