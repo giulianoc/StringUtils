@@ -11,9 +11,9 @@
  * Created on March 29, 2018, 6:27 AM
  */
 
-#ifndef StringUtils_h
-#define StringUtils_h
+#pragma once
 
+#include <vector>
 #include <string>
 
 using namespace std;
@@ -68,5 +68,3 @@ class StringUtils
 	// usato da kmpSearch
 	static void computeLPSArray(string pat, int M, int lps[]);
 };
-
-#endif
