@@ -53,6 +53,9 @@ class StringUtils
 	static string lastURIPath(const string &uri);
 	static string uriPathPrefix(string uri, bool errorIfMissing = false);
 
+	static vector<string> split(const string& str, char delimiter);
+	static string replaceAll(string s, const string &from, const string &to);
+
 #ifdef UTFCPP
 	static string u16ToUtf8(const u16string &in);
 	static u16string utf8ToU16(const string &in);

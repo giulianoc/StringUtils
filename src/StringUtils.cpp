@@ -113,6 +113,29 @@ bool StringUtils::equalCaseInsensitive(const string& s1, const string& s2)
 	return s1.length() != s2.length() ? false : equal(s1.begin(), s1.end(), s2.begin(), [](int c1, int c2) { return toupper(c1) == toupper(c2); });
 }
 
+vector<string> StringUtils::split(const string& str, char delimiter) {
+	vector<string> result;
+
+	size_t pos = 0, prev = 0;
+	while ((pos = str.find(delimiter, prev)) != string::npos) {
+		result.push_back(str.substr(prev, pos - prev));
+		prev = pos + 1;
+	}
+	result.push_back(str.substr(prev));
+
+	return result;
+}
+
+string StringUtils::replaceAll(string s, const string& from, const string& to) {
+	if (from.empty() || s.empty()) return s;
+	size_t pos = 0;
+	while ((pos = s.find(from, pos)) != std::string::npos) {
+		s.replace(pos, from.size(), to);
+		pos += to.size();
+	}
+	return s;
+}
+
 int StringUtils::kmpSearch(string pat, string txt)
 {
 	int M = pat.length();
