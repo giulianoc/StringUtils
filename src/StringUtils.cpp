@@ -96,11 +96,24 @@ string StringUtils::trimNewLineAndTabToo(string s) { return ltrimNewLineAndTabTo
 
 string StringUtils::lowerCase(const string &str)
 {
+	if (str.empty())
+		return str;
 	string lowerCase;
 	lowerCase.resize(str.size());
-	transform(str.begin(), str.end(), lowerCase.begin(), [](unsigned char c) { return tolower(c); });
+	ranges::transform(str, lowerCase.begin(), [](unsigned char c) { return tolower(c); });
 
 	return lowerCase;
+}
+
+string StringUtils::upperCase(const string &str)
+{
+	if (str.empty())
+		return str;
+	string upperCase;
+	upperCase.resize(str.size());
+	ranges::transform(str, upperCase.begin(), [](unsigned char c) { return toupper(c); });
+
+	return upperCase;
 }
 
 bool StringUtils::isNumber(string text)

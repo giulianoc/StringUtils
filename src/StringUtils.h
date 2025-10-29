@@ -13,8 +13,9 @@
 
 #pragma once
 
-#include <vector>
 #include <string>
+#include <format>
+#include <vector>
 
 using namespace std;
 
@@ -39,6 +40,7 @@ class StringUtils
 	static string trimNewLineAndTabToo(string s);
 
 	static string lowerCase(const string &str);
+	static string upperCase(const string &str);
 
 	static bool isNumber(string text);
 
@@ -55,6 +57,24 @@ class StringUtils
 
 	static vector<string> split(const string& str, char delimiter);
 	static string replaceAll(string s, const string &from, const string &to);
+
+	template <typename T>
+	static T getValue(const string &s)
+	{
+		if constexpr (std::is_same_v<T, std::string>)
+			return s;
+		else if constexpr (std::is_same_v<T, bool>)
+			return lowerCase(s) == "true";
+		else if constexpr (std::is_same_v<T, int32_t>)
+			return stol(s);
+		else if constexpr (std::is_same_v<T, int64_t>)
+			return stoll(s);
+		else
+		{
+			throw runtime_error(std::format("Type unknonwn: {}", typeid(T).name()));
+		}
+	}
+
 
 #ifdef UTFCPP
 	static string u16ToUtf8(const u16string &in);
