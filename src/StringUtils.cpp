@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <format>
 #include <locale>
+#include <ranges>
 #include <regex>
 #include <utility>
 #ifdef UTFCPP

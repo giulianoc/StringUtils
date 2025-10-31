@@ -19,10 +19,29 @@
 
 using namespace std;
 
+/*
+switch (hash_case(contentType))
+{
+	case "audio"_case:
+	...
+}
+*/
+// hash_djb2a
+inline constexpr auto hash_case(const string_view sv)
+{
+	unsigned long hash{5381};
+	for (const unsigned char c : sv)
+	{
+		hash = ((hash << 5) + hash) ^ c;
+	}
+	return hash;
+}
+inline constexpr auto operator""_case(const char *str, size_t len) { return hash_case(string_view{str, len}); }
+
 class StringUtils
 {
 
-  public:
+public:
 	static string ltrim(string s);
 	static string rtrim(string s);
 	static string trim(string s);
@@ -74,7 +93,6 @@ class StringUtils
 			throw runtime_error(std::format("Type unknonwn: {}", typeid(T).name()));
 		}
 	}
-
 
 #ifdef UTFCPP
 	static string u16ToUtf8(const u16string &in);
