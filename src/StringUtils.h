@@ -58,8 +58,8 @@ public:
 	static string rtrimNewLineAndTabToo(string s);
 	static string trimNewLineAndTabToo(string s);
 
-	static string lowerCase(const string &str);
-	static string upperCase(const string &str);
+	static string lowerCase(const string_view& str);
+	static string upperCase(const string_view& str);
 
 	static bool isNumber(string text);
 
@@ -75,7 +75,7 @@ public:
 	static string uriPathPrefix(string uri, bool errorIfMissing = false);
 
 	static vector<string> split(const string& str, char delimiter);
-	static string replaceAll(string s, const string &from, const string &to);
+	static string replaceAll(string_view source, const string_view from, const string_view to);
 
 	template <typename T>
 	static T getValue(const string &s)

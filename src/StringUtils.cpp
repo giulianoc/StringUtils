@@ -95,10 +95,10 @@ string StringUtils::rtrimNewLineAndTabToo(string s)
 
 string StringUtils::trimNewLineAndTabToo(string s) { return ltrimNewLineAndTabToo(rtrimNewLineToo(std::move(s))); }
 
-string StringUtils::lowerCase(const string &str)
+string StringUtils::lowerCase(const string_view& str)
 {
 	if (str.empty())
-		return str;
+		return string(str);
 	string lowerCase;
 	lowerCase.resize(str.size());
 	ranges::transform(str, lowerCase.begin(), [](unsigned char c) { return tolower(c); });
@@ -106,10 +106,10 @@ string StringUtils::lowerCase(const string &str)
 	return lowerCase;
 }
 
-string StringUtils::upperCase(const string &str)
+string StringUtils::upperCase(const string_view& str)
 {
 	if (str.empty())
-		return str;
+		return string(str);
 	string upperCase;
 	upperCase.resize(str.size());
 	ranges::transform(str, upperCase.begin(), [](unsigned char c) { return toupper(c); });
@@ -140,15 +140,58 @@ vector<string> StringUtils::split(const string& str, char delimiter) {
 	return result;
 }
 
-string StringUtils::replaceAll(string s, const string& from, const string& to) {
-	if (from.empty() || s.empty()) return s;
+string StringUtils::replaceAll(string_view source, const string_view from, const string_view to)
+{
+    if (from.empty() || source.empty())
+        return string(source);
+
+    size_t occurrences = 0;
+    {
+    	size_t pos = 0;
+    	while ((pos = source.find(from, pos)) != string_view::npos) {
+    		++occurrences;
+    		pos += from.size();
+    	}
+    }
+
+    if (occurrences == 0)
+        return string(source);
+
+    // Calcola la dimensione finale ed esegui reserve
+    const size_t from_len = from.size();
+    const size_t to_len = to.size();
+    const long long diff = static_cast<long long>(to_len) - static_cast<long long>(from_len);
+    const size_t reserve_size = static_cast<size_t>(static_cast<long long>(source.size()) + occurrences * diff);
+
+    string result;
+    result.reserve(reserve_size);
+	size_t start = 0;
+    size_t pos = 0;
+    while ((pos = source.find(from, start)) != string_view::npos) {
+        // append segmento prima della occorrenza
+        result.append(source.data() + start, pos - start);
+        // append replacement
+        result.append(to);
+        start = pos + from_len;
+    }
+    // append il resto dopo l'ultima occorrenza
+    if (start < source.size())
+        result.append(source.data() + start, source.size() - start);
+
+    return result;
+}
+/*
+string StringUtils::replaceAll(const string& source, const string& from, const string& to) {
+	if (from.empty() || source.empty()) return source;
+	string destination = source;
 	size_t pos = 0;
-	while ((pos = s.find(from, pos)) != std::string::npos) {
-		s.replace(pos, from.size(), to);
+	while ((pos = destination.find(from, pos)) != std::string::npos) {
+		destination.replace(pos, from.size(), to);
 		pos += to.size();
 	}
-	return s;
+	return destination;
 }
+*/
 
 int StringUtils::kmpSearch(string pat, string txt)
 {
