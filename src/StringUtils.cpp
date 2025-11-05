@@ -13,6 +13,7 @@
 
 #include "StringUtils.h"
 #include <algorithm>
+#include <charconv>
 #include <format>
 #include <locale>
 #include <ranges>
@@ -25,7 +26,7 @@
 
 string StringUtils::ltrim(string s)
 {
-	auto it = find_if(s.begin(), s.end(), [](char c) { return !isspace<char>(c, locale::classic()); });
+	auto it = ranges::find_if(s, [](char c) { return !isspace<char>(c, locale::classic()); });
 	s.erase(s.begin(), it);
 
 	return s;
@@ -95,6 +96,30 @@ string StringUtils::rtrimNewLineAndTabToo(string s)
 
 string StringUtils::trimNewLineAndTabToo(string s) { return ltrimNewLineAndTabToo(rtrimNewLineToo(std::move(s))); }
 
+string_view StringUtils::trim(const string_view sv)
+{
+	size_t b = 0, e = sv.size();
+	while (b < e && std::isspace(static_cast<unsigned char>(sv[b]))) ++b;
+	while (e > b && std::isspace(static_cast<unsigned char>(sv[e - 1]))) --e;
+	return sv.substr(b, e - b);
+}
+
+optional<int64_t> StringUtils::toInt64(string_view sv, const int base)
+{
+	sv = trim(sv);
+	if (sv.empty())
+		return nullopt;
+
+	int64_t val = 0;
+	auto first = sv.data();
+	auto last  = sv.data() + sv.size();
+	auto res = from_chars(first, last, val, base);
+
+	if (res.ec == std::errc() && res.ptr == last)
+		return val;
+	return std::nullopt;
+}
+
 string StringUtils::lowerCase(const string_view& str)
 {
 	if (str.empty())
@@ -142,43 +167,25 @@ vector<string> StringUtils::split(const string& str, char delimiter) {
 
 string StringUtils::replaceAll(string_view source, const string_view from, const string_view to)
 {
-    if (from.empty() || source.empty())
-        return string(source);
+	if (from.empty() || source.empty())
+		return string(source);
 
-    size_t occurrences = 0;
-    {
-    	size_t pos = 0;
-    	while ((pos = source.find(from, pos)) != string_view::npos) {
-    		++occurrences;
-    		pos += from.size();
-    	}
-    }
+	string result;
+	result.reserve(source.size() + (to.size() > from.size() ? 16 : 0)); // stima semplice
 
-    if (occurrences == 0)
-        return string(source);
-
-    // Calcola la dimensione finale ed esegui reserve
-    const size_t from_len = from.size();
-    const size_t to_len = to.size();
-    const long long diff = static_cast<long long>(to_len) - static_cast<long long>(from_len);
-    const size_t reserve_size = static_cast<size_t>(static_cast<long long>(source.size()) + occurrences * diff);
-
-    string result;
-    result.reserve(reserve_size);
 	size_t start = 0;
-    size_t pos = 0;
-    while ((pos = source.find(from, start)) != string_view::npos) {
-        // append segmento prima della occorrenza
-        result.append(source.data() + start, pos - start);
-        // append replacement
-        result.append(to);
-        start = pos + from_len;
-    }
-    // append il resto dopo l'ultima occorrenza
-    if (start < source.size())
-        result.append(source.data() + start, source.size() - start);
+	while (true) {
+		const size_t pos = source.find(from, start);
+		if (pos == string_view::npos)
+			break;
 
-    return result;
+		result.append(source.substr(start, pos - start));
+		result.append(to);
+		start = pos + from.size();
+	}
+
+	result.append(source.substr(start));
+	return result;
 }
 /*
 string StringUtils::replaceAll(const string& source, const string& from, const string& to) {

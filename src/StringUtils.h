@@ -46,6 +46,9 @@ public:
 	static string rtrim(string s);
 	static string trim(string s);
 
+	static string_view trim(string_view sv);
+	static optional<int64_t> toInt64(string_view sv, int base = 10);
+
 	static string ltrimNewLineToo(string s);
 	static string rtrimNewLineToo(string s);
 	static string trimNewLineToo(string s);
