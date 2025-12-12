@@ -13,8 +13,9 @@
 
 #pragma once
 
-#include <string>
 #include <format>
+#include <spdlog/spdlog.h>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -93,7 +94,9 @@ public:
 			return stoll(s);
 		else
 		{
-			throw runtime_error(std::format("Type unknonwn: {}", typeid(T).name()));
+			const string errorMessage = std::format("Type unknown: {}", typeid(T).name());
+			SPDLOG_ERROR(errorMessage);
+			throw runtime_error(errorMessage);
 		}
 	}
 

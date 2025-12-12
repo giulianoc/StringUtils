@@ -28,6 +28,7 @@ SET (HEADERS
 	StringUtils.h
 )
 
+include_directories("${SPDLOG_INCLUDE_DIR}")
 if(STRINGUTILS_UTFCPP)
 	add_compile_options(-DUTFCPP)
   include_directories("${UTFCPP_INCLUDE_DIR}")
