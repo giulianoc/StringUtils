@@ -303,15 +303,11 @@ string StringUtils::lastURIPath(const string& uri)
 	size_t lastSlashIndex = uri.find_last_of('/');
 	if (lastSlashIndex == string::npos)
 		return "";
-	else
-	{
-		string lastURIPath = uri.substr(lastSlashIndex + 1);
-		size_t startParameterIndex = lastURIPath.find_last_of('?');
-		if (startParameterIndex == string::npos)
-			return lastURIPath;
-		else
-			return lastURIPath.substr(0, startParameterIndex);
-	}
+	string lastURIPath = uri.substr(lastSlashIndex + 1);
+	const size_t startParameterIndex = lastURIPath.find_last_of('?');
+	if (startParameterIndex == string::npos)
+		return lastURIPath;
+	return lastURIPath.substr(0, startParameterIndex);
 }
 
 string StringUtils::uriPathPrefix(string uri, bool errorIfMissing)
@@ -320,13 +316,16 @@ string StringUtils::uriPathPrefix(string uri, bool errorIfMissing)
 	if (lastSlashIndex == string::npos)
 	{
 		if (errorIfMissing)
-			throw runtime_error(std::format(
+		{
+			const string errorMessage = std::format(
 				"No uriPathPrefix found"
 				", uri: {}",
 				uri
-			));
-		else
-			return "";
+			);
+			SPDLOG_ERROR(errorMessage);
+			throw runtime_error(errorMessage);
+		}
+		return "";
 	}
 	return uri.substr(0, lastSlashIndex);
 }
