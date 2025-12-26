@@ -24,7 +24,15 @@ using namespace std;
 switch (hash_case(contentType))
 {
 	case "audio"_case:
-	...
+	{
+		// do something
+		break;
+	}
+	default:
+	{
+		// do something
+		break;
+	}
 }
 */
 // hash_djb2a
