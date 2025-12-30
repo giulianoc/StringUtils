@@ -26,7 +26,10 @@
 
 string StringUtils::ltrim(string s)
 {
-	auto it = ranges::find_if(s, [](char c) { return !isspace<char>(c, locale::classic()); });
+	const auto it = ranges::find_if(s, [](const char c)
+	{
+		return !isspace<char>(c, locale::classic());
+	});
 	s.erase(s.begin(), it);
 
 	return s;
@@ -34,7 +37,10 @@ string StringUtils::ltrim(string s)
 
 string StringUtils::rtrim(string s)
 {
-	auto it = find_if(s.rbegin(), s.rend(), [](char c) { return !isspace<char>(c, locale::classic()); });
+	auto it = find_if(s.rbegin(), s.rend(), [](char c)
+	{
+		return !isspace<char>(c, locale::classic());
+	});
 	s.erase(it.base(), s.end());
 
 	return s;
