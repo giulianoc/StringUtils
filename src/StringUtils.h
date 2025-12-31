@@ -98,8 +98,23 @@ public:
 			return stol(s);
 		else if constexpr (std::is_same_v<T, int64_t>)
 			return stoll(s);
+		else if constexpr (std::is_same_v<T, long long>)
+			return stoll(s);
 		else
 		{
+			/*
+			i: int
+			l: long
+			x: long long
+			y: unsigned long long
+			j: unsigned int
+			m: unsigned long
+			d: double
+			f: float
+			b: bool
+			c: char
+			PKc: const char*
+			*/
 			const std::string errorMessage = std::format("Type unknown: {}", typeid(T).name());
 			SPDLOG_ERROR(errorMessage);
 			throw std::runtime_error(errorMessage);
