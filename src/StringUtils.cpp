@@ -24,85 +24,103 @@
 #endif
 
 
-string StringUtils::ltrim(string s)
+std::string StringUtils::ltrim(std::string s)
 {
-	const auto it = ranges::find_if(s, [](const char c)
+	const auto it = std::ranges::find_if(s, [](const char c)
 	{
-		return !isspace<char>(c, locale::classic());
+		return !std::isspace<char>(c, std::locale::classic());
 	});
 	s.erase(s.begin(), it);
 
 	return s;
 }
 
-string StringUtils::rtrim(string s)
+std::string StringUtils::rtrim(std::string s)
 {
 	auto it = find_if(s.rbegin(), s.rend(), [](char c)
 	{
-		return !isspace<char>(c, locale::classic());
+		return !std::isspace<char>(c, std::locale::classic());
 	});
 	s.erase(it.base(), s.end());
 
 	return s;
 }
 
-string StringUtils::trim(string s) { return ltrim(rtrim(std::move(s))); }
+std::string StringUtils::trim(std::string s) { return ltrim(rtrim(std::move(s))); }
 
-string StringUtils::ltrimNewLineToo(string s)
+std::string StringUtils::ltrimNewLineToo(std::string s)
 {
-	auto it = ranges::find_if(s, [](char c) { return !isspace<char>(c, locale::classic()) && c != '\n'; });
+	auto it = std::ranges::find_if(s, [](char c)
+	{
+		return !std::isspace<char>(c, std::locale::classic()) && c != '\n';
+	});
 	s.erase(s.begin(), it);
 
 	return s;
 }
 
-string StringUtils::rtrimNewLineToo(string s)
+std::string StringUtils::rtrimNewLineToo(std::string s)
 {
-	auto it = find_if(s.rbegin(), s.rend(), [](char c) { return !isspace<char>(c, locale::classic()) && c != '\n'; });
+	auto it = find_if(s.rbegin(), s.rend(), [](char c)
+	{
+		return !std::isspace<char>(c, std::locale::classic()) && c != '\n';
+	});
 	s.erase(it.base(), s.end());
 
 	return s;
 }
 
-string StringUtils::trimNewLineToo(string s) { return ltrimNewLineToo(rtrimNewLineToo(std::move(s))); }
+std::string StringUtils::trimNewLineToo(std::string s) { return ltrimNewLineToo(rtrimNewLineToo(std::move(s))); }
 
-string StringUtils::ltrimTabToo(string s)
+std::string StringUtils::ltrimTabToo(std::string s)
 {
-	auto it = ranges::find_if(s, [](char c) { return !isspace<char>(c, locale::classic()) && c != '\t'; });
+	auto it = std::ranges::find_if(s, [](char c)
+	{
+		return !std::isspace<char>(c, std::locale::classic()) && c != '\t';
+	});
 	s.erase(s.begin(), it);
 
 	return s;
 }
 
-string StringUtils::rtrimTabToo(string s)
+std::string StringUtils::rtrimTabToo(std::string s)
 {
-	auto it = find_if(s.rbegin(), s.rend(), [](char c) { return !isspace<char>(c, locale::classic()) && c != '\t'; });
+	auto it = find_if(s.rbegin(), s.rend(), [](char c)
+	{
+		return !std::isspace<char>(c, std::locale::classic()) && c != '\t';
+	});
 	s.erase(it.base(), s.end());
 
 	return s;
 }
 
-string StringUtils::trimTabToo(string s) { return ltrimTabToo(rtrimTabToo(std::move(s))); }
+std::string StringUtils::trimTabToo(std::string s) { return ltrimTabToo(rtrimTabToo(std::move(s))); }
 
-string StringUtils::ltrimNewLineAndTabToo(string s)
+std::string StringUtils::ltrimNewLineAndTabToo(std::string s)
 {
-	auto it = ranges::find_if(s, [](char c) { return !isspace<char>(c, locale::classic()) && c != '\n' && c != '\t'; });
+	auto it = std::ranges::find_if(s, [](char c)
+	{
+		return !std::isspace<char>(c, std::locale::classic()) && c != '\n' && c != '\t';
+	});
 	s.erase(s.begin(), it);
 
 	return s;
 }
 
-string StringUtils::rtrimNewLineAndTabToo(string s)
+std::string StringUtils::rtrimNewLineAndTabToo(std::string s)
 {
-	auto it = find_if(s.rbegin(), s.rend(), [](char c) { return !isspace<char>(c, locale::classic()) && c != '\n' && c != '\t'; });
+	auto it = find_if(s.rbegin(), s.rend(), [](char c)
+	{
+		return !std::isspace<char>(c, std::locale::classic()) && c != '\n' && c != '\t';
+	});
 	s.erase(it.base(), s.end());
 
 	return s;
 }
 
-string StringUtils::trimNewLineAndTabToo(string s) { return ltrimNewLineAndTabToo(rtrimNewLineToo(std::move(s))); }
+std::string StringUtils::trimNewLineAndTabToo(std::string s) { return ltrimNewLineAndTabToo(rtrimNewLineToo(std::move(s))); }
 
-string_view StringUtils::trim(const string_view sv)
+std::string_view StringUtils::trim(const std::string_view sv)
 {
 	size_t b = 0, e = sv.size();
 	while (b < e && std::isspace(static_cast<unsigned char>(sv[b]))) ++b;
@@ -110,59 +128,60 @@ string_view StringUtils::trim(const string_view sv)
 	return sv.substr(b, e - b);
 }
 
-optional<int64_t> StringUtils::toInt64(string_view sv, const int base)
+std::optional<int64_t> StringUtils::toInt64(std::string_view sv, const int base)
 {
 	sv = trim(sv);
 	if (sv.empty())
-		return nullopt;
+		return std::nullopt;
 
 	int64_t val = 0;
 	auto first = sv.data();
 	auto last  = sv.data() + sv.size();
-	auto res = from_chars(first, last, val, base);
+	auto res = std::from_chars(first, last, val, base);
 
 	if (res.ec == std::errc() && res.ptr == last)
 		return val;
 	return std::nullopt;
 }
 
-string StringUtils::lowerCase(const string_view& str)
+std::string StringUtils::lowerCase(const std::string_view& str)
 {
 	if (str.empty())
-		return string(str);
-	string lowerCase;
+		return std::string(str);
+	std::string lowerCase;
 	lowerCase.resize(str.size());
-	ranges::transform(str, lowerCase.begin(), [](unsigned char c) { return tolower(c); });
+	std::ranges::transform(str, lowerCase.begin(), [](unsigned char c) { return tolower(c); });
 
 	return lowerCase;
 }
 
-string StringUtils::upperCase(const string_view& str)
+std::string StringUtils::upperCase(const std::string_view& str)
 {
 	if (str.empty())
-		return string(str);
-	string upperCase;
+		return std::string(str);
+	std::string upperCase;
 	upperCase.resize(str.size());
-	ranges::transform(str, upperCase.begin(), [](unsigned char c) { return toupper(c); });
+	std::ranges::transform(str, upperCase.begin(), [](unsigned char c) { return toupper(c); });
 
 	return upperCase;
 }
 
-bool StringUtils::isNumber(string text)
+bool StringUtils::isNumber(std::string text)
 {
-	return !text.empty() && ranges::find_if(text.begin(), text.end(), [](unsigned char c) { return !isdigit(c); }) == text.end();
+	return !text.empty() && std::ranges::find_if(text.begin(), text.end(), [](unsigned char c) { return !isdigit(c); }) == text.end();
 }
 
-bool StringUtils::equalCaseInsensitive(const string& s1, const string& s2)
+bool StringUtils::equalCaseInsensitive(const std::string& s1, const std::string& s2)
 {
 	return s1.length() != s2.length() ? false : equal(s1.begin(), s1.end(), s2.begin(), [](int c1, int c2) { return toupper(c1) == toupper(c2); });
 }
 
-vector<string> StringUtils::split(const string& str, char delimiter) {
-	vector<string> result;
+std::vector<std::string> StringUtils::split(const std::string& str, char delimiter)
+{
+	std::vector<std::string> result;
 
 	size_t pos = 0, prev = 0;
-	while ((pos = str.find(delimiter, prev)) != string::npos) {
+	while ((pos = str.find(delimiter, prev)) != std::string::npos) {
 		result.push_back(str.substr(prev, pos - prev));
 		prev = pos + 1;
 	}
@@ -171,18 +190,18 @@ vector<string> StringUtils::split(const string& str, char delimiter) {
 	return result;
 }
 
-string StringUtils::replaceAll(string_view source, const string_view from, const string_view to)
+std::string StringUtils::replaceAll(std::string_view source, const std::string_view from, const std::string_view to)
 {
 	if (from.empty() || source.empty())
-		return string(source);
+		return std::string(source);
 
-	string result;
+	std::string result;
 	result.reserve(source.size() + (to.size() > from.size() ? 16 : 0)); // stima semplice
 
 	size_t start = 0;
 	while (true) {
 		const size_t pos = source.find(from, start);
-		if (pos == string_view::npos)
+		if (pos == std::string_view::npos)
 			break;
 
 		result.append(source.substr(start, pos - start));
@@ -194,9 +213,9 @@ string StringUtils::replaceAll(string_view source, const string_view from, const
 	return result;
 }
 /*
-string StringUtils::replaceAll(const string& source, const string& from, const string& to) {
+std::string StringUtils::replaceAll(const std::string& source, const std::string& from, const std::string& to) {
 	if (from.empty() || source.empty()) return source;
-	string destination = source;
+	std::string destination = source;
 	size_t pos = 0;
 	while ((pos = destination.find(from, pos)) != std::string::npos) {
 		destination.replace(pos, from.size(), to);
@@ -206,7 +225,7 @@ string StringUtils::replaceAll(const string& source, const string& from, const s
 }
 */
 
-int StringUtils::kmpSearch(string pat, string txt)
+int StringUtils::kmpSearch(std::string pat, std::string txt)
 {
 	int M = pat.length();
 	int N = txt.length();
@@ -263,7 +282,7 @@ int StringUtils::kmpSearch(string pat, string txt)
 	return res;
 }
 
-void StringUtils::computeLPSArray(string pat, int M, int lps[])
+void StringUtils::computeLPSArray(std::string pat, int M, int lps[])
 {
 
 	// Length of the previous longest
@@ -304,32 +323,32 @@ void StringUtils::computeLPSArray(string pat, int M, int lps[])
 	}
 }
 
-string StringUtils::lastURIPath(const string& uri)
+std::string StringUtils::lastURIPath(const std::string& uri)
 {
 	size_t lastSlashIndex = uri.find_last_of('/');
-	if (lastSlashIndex == string::npos)
+	if (lastSlashIndex == std::string::npos)
 		return "";
-	string lastURIPath = uri.substr(lastSlashIndex + 1);
+	std::string lastURIPath = uri.substr(lastSlashIndex + 1);
 	const size_t startParameterIndex = lastURIPath.find_last_of('?');
-	if (startParameterIndex == string::npos)
+	if (startParameterIndex == std::string::npos)
 		return lastURIPath;
 	return lastURIPath.substr(0, startParameterIndex);
 }
 
-string StringUtils::uriPathPrefix(string uri, bool errorIfMissing)
+std::string StringUtils::uriPathPrefix(std::string uri, bool errorIfMissing)
 {
 	size_t lastSlashIndex = uri.find_last_of('/');
-	if (lastSlashIndex == string::npos)
+	if (lastSlashIndex == std::string::npos)
 	{
 		if (errorIfMissing)
 		{
-			const string errorMessage = std::format(
+			const std::string errorMessage = std::format(
 				"No uriPathPrefix found"
 				", uri: {}",
 				uri
 			);
 			SPDLOG_ERROR(errorMessage);
-			throw runtime_error(errorMessage);
+			throw std::runtime_error(errorMessage);
 		}
 		return "";
 	}
@@ -337,15 +356,15 @@ string StringUtils::uriPathPrefix(string uri, bool errorIfMissing)
 }
 
 #ifdef UTFCPP
-string StringUtils::u32ToUtf8(const u32string &in)
+std::string StringUtils::u32ToUtf8(const std::u32string &in)
 {
 	// tenta di costruire una std::string da caratteri char32_t (Unicode code points a 32 bit), ma std::string è fatta per char (8 bit).
 	// Questo codice non effettua una conversione UTF-32 → UTF-8, ma semplicemente copia i byte più bassi di ogni char32_t, con risultati non validi
-	// return string(in.begin(), in.end());
+	// return std::string(in.begin(), in.end());
 
 	// Attualmente lo standard non prevede questa conversione, bisogna quindi usare una libreria esterna come
 	// utfcpp semplice e leggera
-	string out;
+	std::string out;
 	utf8::utf32to8(in.begin(), in.end(), std::back_inserter(out));
 	return out;
 	/*
@@ -354,7 +373,7 @@ string StringUtils::u32ToUtf8(const u32string &in)
 	*/
 }
 
-u32string StringUtils::utf8ToU32(const string &in)
+std::u32string StringUtils::utf8ToU32(const std::string &in)
 {
 	// sbagliato, vedi commento sopra
 	// return u32string(in.begin(), in.end());
@@ -368,7 +387,7 @@ u32string StringUtils::utf8ToU32(const string &in)
 	*/
 }
 
-string StringUtils::u16ToUtf8(const u16string &in)
+std::string StringUtils::u16ToUtf8(const std::u16string &in)
 {
 	// sbagliato, vedi commento sopra
 	// return string(in.begin(), in.end());
@@ -382,7 +401,7 @@ string StringUtils::u16ToUtf8(const u16string &in)
 	*/
 }
 
-u16string StringUtils::utf8ToU16(const string &in)
+std::u16string StringUtils::utf8ToU16(const std::string &in)
 {
 	// sbagliato, vedi commento sopra
 	return {in.begin(), in.end()};

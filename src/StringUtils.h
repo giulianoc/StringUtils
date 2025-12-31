@@ -18,8 +18,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 /*
 switch (hash_case(contentType))
 {
@@ -36,7 +34,7 @@ switch (hash_case(contentType))
 }
 */
 // hash_djb2a
-inline constexpr auto hash_case(const string_view sv)
+inline constexpr auto hash_case(const std::string_view sv)
 {
 	unsigned long hash{5381};
 	for (const unsigned char c : sv)
@@ -45,52 +43,52 @@ inline constexpr auto hash_case(const string_view sv)
 	}
 	return hash;
 }
-inline constexpr auto operator""_case(const char *str, size_t len) { return hash_case(string_view{str, len}); }
+inline constexpr auto operator""_case(const char *str, size_t len) { return hash_case(std::string_view{str, len}); }
 
 class StringUtils
 {
 
 public:
-	static string ltrim(string s);
-	static string rtrim(string s);
-	static string trim(string s);
+	static std::string ltrim(std::string s);
+	static std::string rtrim(std::string s);
+	static std::string trim(std::string s);
 
-	static string_view trim(string_view sv);
-	static optional<int64_t> toInt64(string_view sv, int base = 10);
+	static std::string_view trim(std::string_view sv);
+	static std::optional<int64_t> toInt64(std::string_view sv, int base = 10);
 
-	static string ltrimNewLineToo(string s);
-	static string rtrimNewLineToo(string s);
-	static string trimNewLineToo(string s);
+	static std::string ltrimNewLineToo(std::string s);
+	static std::string rtrimNewLineToo(std::string s);
+	static std::string trimNewLineToo(std::string s);
 
-	static string ltrimTabToo(string s);
-	static string rtrimTabToo(string s);
-	static string trimTabToo(string s);
+	static std::string ltrimTabToo(std::string s);
+	static std::string rtrimTabToo(std::string s);
+	static std::string trimTabToo(std::string s);
 
-	static string ltrimNewLineAndTabToo(string s);
-	static string rtrimNewLineAndTabToo(string s);
-	static string trimNewLineAndTabToo(string s);
+	static std::string ltrimNewLineAndTabToo(std::string s);
+	static std::string rtrimNewLineAndTabToo(std::string s);
+	static std::string trimNewLineAndTabToo(std::string s);
 
-	static string lowerCase(const string_view& str);
-	static string upperCase(const string_view& str);
+	static std::string lowerCase(const std::string_view& str);
+	static std::string upperCase(const std::string_view& str);
 
-	static bool isNumber(string text);
+	static bool isNumber(std::string text);
 
-	static bool equalCaseInsensitive(const string &s1, const string &s2);
+	static bool equalCaseInsensitive(const std::string &s1, const std::string &s2);
 
 	// conta quante volte abbiamo pat in txt usando l'algoritmo KMP
 	// Time Complexity: O(M + N)
 	// Auxiliary Space: O(M) As an array of size M is used to store the longest
 	// prefix suffix values for the pattern.
-	static int kmpSearch(string pat, string txt);
+	static int kmpSearch(std::string pat, std::string txt);
 
-	static string lastURIPath(const string &uri);
-	static string uriPathPrefix(string uri, bool errorIfMissing = false);
+	static std::string lastURIPath(const std::string &uri);
+	static std::string uriPathPrefix(std::string uri, bool errorIfMissing = false);
 
-	static vector<string> split(const string& str, char delimiter);
-	static string replaceAll(string_view source, const string_view from, const string_view to);
+	static std::vector<std::string> split(const std::string& str, char delimiter);
+	static std::string replaceAll(std::string_view source, const std::string_view from, const std::string_view to);
 
 	template <typename T>
-	static T getValue(const string &s)
+	static T getValue(const std::string &s)
 	{
 		if constexpr (std::is_same_v<T, std::string>)
 			return s;
@@ -102,21 +100,21 @@ public:
 			return stoll(s);
 		else
 		{
-			const string errorMessage = std::format("Type unknown: {}", typeid(T).name());
+			const std::string errorMessage = std::format("Type unknown: {}", typeid(T).name());
 			SPDLOG_ERROR(errorMessage);
-			throw runtime_error(errorMessage);
+			throw std::runtime_error(errorMessage);
 		}
 	}
 
 #ifdef UTFCPP
-	static string u16ToUtf8(const u16string &in);
-	static u16string utf8ToU16(const string &in);
+	static std::string u16ToUtf8(const std::u16string &in);
+	static std::u16string utf8ToU16(const std::string &in);
 
-	static string u32ToUtf8(const u32string &in);
-	static u32string utf8ToU32(const string &in);
+	static std::string u32ToUtf8(const std::u32string &in);
+	static std::u32string utf8ToU32(const std::string &in);
 #endif
 
   private:
 	// usato da kmpSearch
-	static void computeLPSArray(string pat, int M, int lps[]);
+	static void computeLPSArray(std::string pat, int M, int lps[]);
 };
