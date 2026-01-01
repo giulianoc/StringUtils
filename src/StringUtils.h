@@ -92,17 +92,16 @@ public:
 	{
 		if constexpr (std::is_same_v<T, std::string>)
 			return s;
-		else if constexpr (std::is_same_v<T, bool>)
+		if constexpr (std::is_same_v<T, bool>)
 			return lowerCase(s) == "true";
-		else if constexpr (std::is_same_v<T, int32_t>)
+		if constexpr (std::is_same_v<T, int32_t>)
 			return stol(s);
-		else if constexpr (std::is_same_v<T, int64_t>)
+		if constexpr (std::is_same_v<T, int64_t>)
 			return stoll(s);
-		else if constexpr (std::is_same_v<T, long long>)
+		if constexpr (std::is_same_v<T, long long>)
 			return stoll(s);
-		else
 		{
-			/*
+			/* typeid(T).name():
 			i: int
 			l: long
 			x: long long
