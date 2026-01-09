@@ -100,6 +100,10 @@ public:
 			return stoll(s);
 		if constexpr (std::is_same_v<T, long long>)
 			return stoll(s);
+		if constexpr (std::is_same_v<T, unsigned long>)
+			return stoul(s);
+		if constexpr (std::is_same_v<T, unsigned long long>)
+			return stoull(s);
 		{
 			/* typeid(T).name():
 			i: int
