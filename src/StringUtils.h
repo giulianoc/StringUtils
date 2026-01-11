@@ -94,16 +94,31 @@ public:
 			return s;
 		if constexpr (std::is_same_v<T, bool>)
 			return lowerCase(s) == "true";
-		if constexpr (std::is_same_v<T, int32_t>)
-			return stol(s);
-		if constexpr (std::is_same_v<T, int64_t>)
-			return stoll(s);
-		if constexpr (std::is_same_v<T, long long>)
-			return stoll(s);
-		if constexpr (std::is_same_v<T, unsigned long>)
-			return stoul(s);
-		if constexpr (std::is_same_v<T, unsigned long long>)
-			return stoull(s);
+		if constexpr (std::is_same_v<T, int>
+			|| std::is_same_v<T, long>
+			|| std::is_same_v<T, long long>
+			|| std::is_same_v<T, unsigned long long>
+			|| std::is_same_v<T, unsigned int>
+			|| std::is_same_v<T, unsigned long>
+			|| std::is_same_v<T, double>
+			|| std::is_same_v<T, float>
+			)
+		{
+			T value;
+			auto [ptr, ec] = std::from_chars(s.data(), s.data() + s.size(), value);
+			if (ec != std::errc())
+			{
+				// parsing fallito
+				std::string errorMessage;
+				if (ec == std::errc::invalid_argument)
+					errorMessage = "Not a number";
+				else if (ec == std::errc::result_out_of_range)
+					errorMessage = "Number larger than the type (container)";
+				SPDLOG_ERROR(errorMessage);
+				throw std::runtime_error(errorMessage);
+			}
+			return value;
+		}
 		{
 			/* typeid(T).name():
 			i: int
