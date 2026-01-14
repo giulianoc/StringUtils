@@ -79,7 +79,7 @@ public:
 	// Time Complexity: O(M + N)
 	// Auxiliary Space: O(M) As an array of size M is used to store the longest
 	// prefix suffix values for the pattern.
-	static int kmpSearch(std::string pat, std::string txt);
+	static int kmpSearch(const std::string &pat, const std::string &txt);
 
 	static std::string lastURIPath(const std::string &uri);
 	static std::string uriPathPrefix(std::string uri, bool errorIfMissing = false);
@@ -149,5 +149,5 @@ public:
 
   private:
 	// usato da kmpSearch
-	static void computeLPSArray(std::string pat, int M, int lps[]);
+	static void computeLPSArray(const std::string &pat, size_t M, int lps[]);
 };

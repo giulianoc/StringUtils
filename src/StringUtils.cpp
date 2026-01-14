@@ -137,9 +137,9 @@ std::optional<int64_t> StringUtils::toInt64(std::string_view sv, const int base)
 	int64_t val = 0;
 	auto first = sv.data();
 	auto last  = sv.data() + sv.size();
-	auto res = std::from_chars(first, last, val, base);
+	auto [ptr, ec] = std::from_chars(first, last, val, base);
 
-	if (res.ec == std::errc() && res.ptr == last)
+	if (ec == std::errc() && ptr == last)
 		return val;
 	return std::nullopt;
 }
@@ -225,18 +225,20 @@ std::string StringUtils::replaceAll(const std::string& source, const std::string
 }
 */
 
-int StringUtils::kmpSearch(std::string pat, std::string txt)
+int StringUtils::kmpSearch(const std::string &pat, const std::string &txt)
 {
-	int M = pat.length();
-	int N = txt.length();
+	const size_t M = pat.length();
+	const size_t N = txt.length();
 
 // Create lps[] that will hold the longest
 // prefix suffix values for pattern
-#ifdef _WIN32
-	int *lps = new int[M];
+// #ifdef _WIN32
+	const auto lps = new int[M];
+/*
 #else
 	int lps[M];
 #endif
+*/
 	int j = 0; // index for pat[]
 
 	// Preprocess the pattern (calculate lps[]
@@ -245,7 +247,7 @@ int StringUtils::kmpSearch(std::string pat, std::string txt)
 
 	int i = 0; // index for txt[]
 	int res = 0;
-	int next_i = 0;
+	// int next_i = 0;
 
 	while (i < N)
 	{
@@ -276,13 +278,13 @@ int StringUtils::kmpSearch(std::string pat, std::string txt)
 				i = i + 1;
 		}
 	}
-#ifdef _WIN32
+// #ifdef _WIN32
 	delete[] lps;
-#endif
+// #endif
 	return res;
 }
 
-void StringUtils::computeLPSArray(std::string pat, int M, int lps[])
+void StringUtils::computeLPSArray(const std::string &pat, size_t M, int lps[])
 {
 
 	// Length of the previous longest
