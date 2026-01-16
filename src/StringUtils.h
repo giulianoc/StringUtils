@@ -95,6 +95,7 @@ public:
 		if constexpr (std::is_same_v<T, bool>)
 			return lowerCase(s) == "true";
 		if constexpr (std::is_same_v<T, int>
+			|| std::is_same_v<T, short>
 			|| std::is_same_v<T, long>
 			|| std::is_same_v<T, long long>
 			|| std::is_same_v<T, unsigned long long>
@@ -132,6 +133,7 @@ public:
 			b: bool
 			c: char
 			PKc: const char*
+			s: short
 			*/
 			const std::string errorMessage = std::format("Type unknown: {}", typeid(T).name());
 			SPDLOG_ERROR(errorMessage);
