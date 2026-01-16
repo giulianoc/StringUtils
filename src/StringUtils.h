@@ -112,9 +112,9 @@ public:
 				// parsing fallito
 				std::string errorMessage;
 				if (ec == std::errc::invalid_argument)
-					errorMessage = "Not a number";
+					errorMessage = std::format("Not a number, value: {}", s);
 				else if (ec == std::errc::result_out_of_range)
-					errorMessage = "Number larger than the type (container)";
+					errorMessage = std::format("Number larger than the type (container), value: {}", s);
 				SPDLOG_ERROR(errorMessage);
 				throw std::runtime_error(errorMessage);
 			}
@@ -135,7 +135,7 @@ public:
 			PKc: const char*
 			s: short
 			*/
-			const std::string errorMessage = std::format("Type unknown: {}", typeid(T).name());
+			const std::string errorMessage = std::format("Type unknown: {}, value: {}", typeid(T).name(), s);
 			SPDLOG_ERROR(errorMessage);
 			throw std::runtime_error(errorMessage);
 		}
