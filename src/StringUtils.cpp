@@ -349,7 +349,7 @@ std::string StringUtils::uriPathPrefix(std::string uri, bool errorIfMissing)
 				", uri: {}",
 				uri
 			);
-			SPDLOG_ERROR(errorMessage);
+			LOG_ERROR(errorMessage);
 			throw std::runtime_error(errorMessage);
 		}
 		return "";

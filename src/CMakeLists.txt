@@ -29,12 +29,17 @@ SET (HEADERS
 )
 
 include_directories("${SPDLOG_INCLUDE_DIR}")
+include_directories("${THREADLOGGER_INCLUDE_DIR}")
 if(STRINGUTILS_UTFCPP)
 	add_compile_options(-DUTFCPP)
-  include_directories("${UTFCPP_INCLUDE_DIR}")
+	include_directories("${UTFCPP_INCLUDE_DIR}")
 endif()
 
 add_library (StringUtils SHARED ${SOURCES} ${HEADERS})
+
+if(APPLE)
+	target_link_libraries(StringUtils ThreadLogger)
+endif()
 
 if(ZORAC)
 	install (TARGETS StringUtils DESTINATION services/cms-import)

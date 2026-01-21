@@ -13,10 +13,11 @@
 
 #pragma once
 
+#include <charconv>
 #include <format>
-#include <spdlog/spdlog.h>
 #include <string>
 #include <vector>
+#include "ThreadLogger.h"
 
 /*
 switch (hash_case(contentType))
@@ -34,7 +35,7 @@ switch (hash_case(contentType))
 }
 */
 // hash_djb2a
-inline constexpr auto hash_case(const std::string_view sv)
+constexpr auto hash_case(const std::string_view sv)
 {
 	unsigned long hash{5381};
 	for (const unsigned char c : sv)
@@ -43,7 +44,7 @@ inline constexpr auto hash_case(const std::string_view sv)
 	}
 	return hash;
 }
-inline constexpr auto operator""_case(const char *str, size_t len) { return hash_case(std::string_view{str, len}); }
+constexpr auto operator""_case(const char *str, size_t len) { return hash_case(std::string_view{str, len}); }
 
 class StringUtils
 {
@@ -115,7 +116,7 @@ public:
 					errorMessage = std::format("Not a number, value: {}", s);
 				else if (ec == std::errc::result_out_of_range)
 					errorMessage = std::format("Number larger than the type (container), value: {}", s);
-				SPDLOG_ERROR(errorMessage);
+				LOG_ERROR(errorMessage);
 				throw std::runtime_error(errorMessage);
 			}
 			return value;
@@ -136,7 +137,7 @@ public:
 			s: short
 			*/
 			const std::string errorMessage = std::format("Type unknown: {}, value: {}", typeid(T).name(), s);
-			SPDLOG_ERROR(errorMessage);
+			LOG_ERROR(errorMessage);
 			throw std::runtime_error(errorMessage);
 		}
 	}
