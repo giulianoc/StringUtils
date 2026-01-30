@@ -55,7 +55,36 @@ public:
 	static std::string trim(std::string s);
 
 	static std::string_view trim(std::string_view sv);
-	static std::optional<int64_t> toInt64(std::string_view sv, int base = 10);
+
+	template <typename T>
+	static T toNumber(std::string_view sv, const int base = 10)
+	{
+		sv = trim(sv);
+		if (sv.empty())
+		{
+			const std::string errorMessage = std::format("StringUtils::toNumber failed"
+				", sv: '{}'", sv
+				);
+			LOG_ERROR(errorMessage);
+			throw std::invalid_argument(errorMessage);
+		}
+
+		T val = 0;
+		const auto first = sv.data();
+		const auto last  = sv.data() + sv.size();
+		auto [ptr, ec] = std::from_chars(first, last, val, base);
+
+		if (ec == std::errc() && ptr == last)
+			return val;
+
+		{
+			const std::string errorMessage = std::format("StringUtils::toNumber failed"
+				", sv: '{}'", sv
+				);
+			LOG_ERROR(errorMessage);
+			throw std::invalid_argument(errorMessage);
+		}
+	}
 
 	static std::string ltrimNewLineToo(std::string s);
 	static std::string rtrimNewLineToo(std::string s);

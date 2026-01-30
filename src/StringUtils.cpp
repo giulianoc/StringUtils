@@ -128,22 +128,6 @@ std::string_view StringUtils::trim(const std::string_view sv)
 	return sv.substr(b, e - b);
 }
 
-std::optional<int64_t> StringUtils::toInt64(std::string_view sv, const int base)
-{
-	sv = trim(sv);
-	if (sv.empty())
-		return std::nullopt;
-
-	int64_t val = 0;
-	auto first = sv.data();
-	auto last  = sv.data() + sv.size();
-	auto [ptr, ec] = std::from_chars(first, last, val, base);
-
-	if (ec == std::errc() && ptr == last)
-		return val;
-	return std::nullopt;
-}
-
 std::string StringUtils::lowerCase(const std::string_view& str)
 {
 	if (str.empty())
