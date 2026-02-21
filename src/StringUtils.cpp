@@ -209,13 +209,14 @@ std::string StringUtils::replaceAll(const std::string& source, const std::string
 }
 */
 
-void StringUtils::normalizeWhitespace(std::string& input)
+std::string StringUtils::normalizeWhitespace(std::string input)
 {
 	for (char& c : input)
 	{
 		if (c == '\t' || c == '\n' || c == '\r')
 			c = ' ';
 	}
+	return input;
 }
 
 int StringUtils::kmpSearch(const std::string &pat, const std::string &txt)
