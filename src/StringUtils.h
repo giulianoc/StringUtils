@@ -116,7 +116,7 @@ public:
 
 	static std::vector<std::string> split(const std::string& str, char delimiter);
 	static std::string replaceAll(std::string_view source, const std::string_view from, const std::string_view to);
-	static std::string normalizeWhitespace(std::string input);
+	static std::string normalizeWhitespace(const std::string &input, bool sql = false);
 
 	template <typename T>
 	static T getValue(const std::string &s)

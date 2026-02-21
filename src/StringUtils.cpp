@@ -209,14 +209,53 @@ std::string StringUtils::replaceAll(const std::string& source, const std::string
 }
 */
 
-std::string StringUtils::normalizeWhitespace(std::string input)
+std::string StringUtils::normalizeWhitespace(const std::string &input, const bool sql)
 {
-	for (char& c : input)
+	std::string output;
+	output.reserve(input.size());
+
+	bool inString = false;
+
+	for (size_t i = 0; i < input.size(); ++i)
 	{
+		char c = input[i];
+
+		// Gestione stringhe SQL '...'
+		if (sql && c == '\'')
+		{
+			output += c;
+
+			// gestisce escape ''
+			if (inString && i + 1 < input.size() && input[i + 1] == '\'')
+			{
+				output += input[i + 1];
+				++i;
+				continue;
+			}
+
+			inString = !inString;
+			continue;
+		}
+
+		// Rimozione commenti SQL --
+		if (sql && !inString && c == '-' && i + 1 < input.size() && input[i + 1] == '-')
+		{
+			// salta fino a fine linea
+			while (i < input.size() && input[i] != '\n')
+				++i;
+
+			output += ' '; // sostituisce il commento con uno spazio
+			continue;
+		}
+
+		// Normalizzazione whitespace
 		if (c == '\t' || c == '\n' || c == '\r')
-			c = ' ';
+			output += ' ';
+		else
+			output += c;
 	}
-	return input;
+
+	return output;
 }
 
 int StringUtils::kmpSearch(const std::string &pat, const std::string &txt)
