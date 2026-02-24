@@ -114,7 +114,8 @@ public:
 	static std::string lastURIPath(const std::string &uri);
 	static std::string uriPathPrefix(std::string uri, bool errorIfMissing = false);
 
-	static std::vector<std::string> split(const std::string& str, char delimiter);
+	static std::vector<std::string> split(const std::string& str, char delimiter, uint8_t limit = 0);
+	static std::pair<std::string, std::string> splitFirst(const std::string &str, char delimiter);
 	static std::string replaceAll(std::string_view source, const std::string_view from, const std::string_view to);
 	static std::string normalizeWhitespace(const std::string &input, bool sql = false);
 

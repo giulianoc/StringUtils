@@ -160,18 +160,26 @@ bool StringUtils::equalCaseInsensitive(const std::string& s1, const std::string&
 	return s1.length() != s2.length() ? false : equal(s1.begin(), s1.end(), s2.begin(), [](int c1, int c2) { return toupper(c1) == toupper(c2); });
 }
 
-std::vector<std::string> StringUtils::split(const std::string& str, char delimiter)
-{
+std::vector<std::string> StringUtils::split(const std::string &str, const char delimiter, const uint8_t limit) {
 	std::vector<std::string> result;
 
 	size_t pos = 0, prev = 0;
 	while ((pos = str.find(delimiter, prev)) != std::string::npos) {
 		result.push_back(str.substr(prev, pos - prev));
 		prev = pos + 1;
+		if (limit > 0 && result.size() >= limit - 1)
+			break;
 	}
 	result.push_back(str.substr(prev));
 
 	return result;
+}
+
+std::pair<std::string, std::string> StringUtils::splitFirst(const std::string &str, const char delimiter) {
+	auto splits = split(str, delimiter, 2);
+	if (splits.size() == 1)
+		return {splits[0], ""};
+	return {splits[0], splits[1]};
 }
 
 std::string StringUtils::replaceAll(std::string_view source, const std::string_view from, const std::string_view to)
