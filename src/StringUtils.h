@@ -176,6 +176,8 @@ public:
 #ifdef UTFCPP
 	static std::string u16ToUtf8(const std::u16string &in);
 	static std::u16string utf8ToU16(const std::string &in);
+	static std::string utf8_substr_codepoints(const std::string &s, size_t startCodePoint,
+		std::optional<size_t> countCodePoint = std::nullopt);
 
 	static std::string u32ToUtf8(const std::u32string &in);
 	static std::u32string utf8ToU32(const std::string &in);

@@ -458,4 +458,29 @@ std::u16string StringUtils::utf8ToU16(const std::string &in)
 	return conv.from_bytes(in);
 	*/
 }
+
+// std::string::substr(pos, len) lavora a byte, non a “caratteri”. Quindi se la tua stringa è in UTF‑8 (tipico su Linux/macOS
+// e spesso anche in Windows se la costruisci così), una lettera come ù occupa più byte (di solito 2). Risultato:
+// - substr può tagliare in mezzo a una sequenza UTF‑8 → stringa risultante non valida (caratteri “�” o problemi in output/confronti).
+// - pos e len sono conteggiati in byte, non in “code point” (né in “grapheme”, cioè carattere “visivo”)
+// Il prossimo metodo usa code point Unicode (ù = 1 carattere)
+std::string StringUtils::utf8_substr_codepoints(const std::string& s, const size_t startCodePoint,
+	const std::optional<size_t> countCodePoint)
+{
+	auto it = s.begin();
+	const auto end = s.end();
+
+	// Valida e/o assicura che l'iterazione sia su UTF-8 corretto
+	// (se non vuoi eccezioni, puoi usare utf8::is_valid prima)
+	// it -> byte start del code point start_cp
+	utf8::advance(it, startCodePoint, end);
+
+	if (!countCodePoint.has_value())
+		return {it, end};
+
+	auto it2 = it;
+	utf8::advance(it2, *countCodePoint, end);    // it2 -> byte end dopo count_cp code point
+
+	return {it, it2};
+}
 #endif
