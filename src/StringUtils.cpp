@@ -398,7 +398,7 @@ std::string StringUtils::uriPathPrefix(std::string uri, bool errorIfMissing)
 	return uri.substr(0, lastSlashIndex);
 }
 
-inline std::string StringUtils::mapToString(const std::unordered_map<std::string, std::string>& m)
+std::string StringUtils::mapToString(const std::unordered_map<std::string, std::string>& m)
 {
 	std::vector<std::string> items;
 	items.reserve(m.size());
