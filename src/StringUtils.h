@@ -117,6 +117,7 @@ public:
 	static std::pair<std::string, std::string> splitFirst(const std::string &str, char delimiter);
 	static std::string replaceAll(std::string_view source, const std::string_view from, const std::string_view to);
 	static std::string normalizeWhitespace(const std::string &input, bool sql = false);
+	static std::string mapToString(const std::unordered_map<std::string, std::string>& m);
 
 	template <typename T>
 	static T getValue(const std::string &s)

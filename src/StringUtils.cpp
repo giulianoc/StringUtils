@@ -17,6 +17,7 @@
 #include <locale>
 #include <ranges>
 #include <regex>
+#include <spdlog/fmt/bundled/ranges.h>
 #include <utility>
 #ifdef UTFCPP
 	#include <utf8.h>
@@ -395,6 +396,15 @@ std::string StringUtils::uriPathPrefix(std::string uri, bool errorIfMissing)
 		return "";
 	}
 	return uri.substr(0, lastSlashIndex);
+}
+
+inline std::string StringUtils::mapToString(const std::unordered_map<std::string, std::string>& m)
+{
+	std::vector<std::string> items;
+	items.reserve(m.size());
+	for (const auto& [k, v] : m)
+		items.push_back(std::format("{}={}", k, v));
+	return fmt::format("{{{}}}", fmt::join(items, ", "));
 }
 
 #ifdef UTFCPP
