@@ -49,9 +49,9 @@ class StringUtils
 {
 
 public:
-	static std::string ltrim(std::string s);
-	static std::string rtrim(std::string s);
-	static std::string trim(std::string s);
+	static std::string ltrimSpace(std::string s);
+	static std::string rtrimSpace(std::string s);
+	static std::string trimSpace(std::string s);
 
 	static std::string_view trim(std::string_view sv);
 
@@ -85,17 +85,17 @@ public:
 		}
 	}
 
-	static std::string ltrimNewLineToo(std::string s);
-	static std::string rtrimNewLineToo(std::string s);
-	static std::string trimNewLineToo(std::string s);
+	static std::string ltrimNewLine(std::string s);
+	static std::string rtrimNewLine(std::string s);
+	static std::string trimNewLine(std::string s);
 
-	static std::string ltrimTabToo(std::string s);
-	static std::string rtrimTabToo(std::string s);
-	static std::string trimTabToo(std::string s);
+	static std::string ltrimTab(std::string s);
+	static std::string rtrimTab(std::string s);
+	static std::string trimTab(std::string s);
 
-	static std::string ltrimNewLineAndTabToo(std::string s);
-	static std::string rtrimNewLineAndTabToo(std::string s);
-	static std::string trimNewLineAndTabToo(std::string s);
+	static std::string ltrim(std::string s);
+	static std::string rtrim(std::string s);
+	static std::string trim(std::string s);
 
 	static std::string lowerCase(const std::string_view& str);
 	static std::string upperCase(const std::string_view& str);

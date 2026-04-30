@@ -24,10 +24,84 @@
 #endif
 
 
-std::string StringUtils::ltrim(std::string s)
+std::string StringUtils::ltrimSpace(std::string s)
 {
 	const auto it = std::ranges::find_if(s, [](const char c)
 	{
+		return c != ' '; // trim solo spazi
+	});
+	s.erase(s.begin(), it);
+
+	return s;
+}
+
+std::string StringUtils::rtrimSpace(std::string s)
+{
+	auto it = find_if(s.rbegin(), s.rend(), [](char c)
+	{
+		return c != ' '; // trim solo spazi
+	});
+	s.erase(it.base(), s.end());
+
+	return s;
+}
+
+std::string StringUtils::trimSpace(std::string s) { return ltrimSpace(rtrimSpace(std::move(s))); }
+
+std::string StringUtils::ltrimNewLine(std::string s)
+{
+	auto it = std::ranges::find_if(s, [](char c)
+	{
+		return c != '\n' && c != '\r';
+	});
+	s.erase(s.begin(), it);
+
+	return s;
+}
+
+std::string StringUtils::rtrimNewLine(std::string s)
+{
+	auto it = find_if(s.rbegin(), s.rend(), [](char c)
+	{
+		return c != '\n' && c != '\r';
+	});
+	s.erase(it.base(), s.end());
+
+	return s;
+}
+
+std::string StringUtils::trimNewLine(std::string s) { return ltrimNewLine(rtrimNewLine(std::move(s))); }
+
+std::string StringUtils::ltrimTab(std::string s)
+{
+	auto it = std::ranges::find_if(s, [](char c)
+	{
+		return c != '\t';
+	});
+	s.erase(s.begin(), it);
+
+	return s;
+}
+
+std::string StringUtils::rtrimTab(std::string s)
+{
+	auto it = find_if(s.rbegin(), s.rend(), [](char c)
+	{
+		return c != '\t';
+	});
+	s.erase(it.base(), s.end());
+
+	return s;
+}
+
+std::string StringUtils::trimTab(std::string s) { return ltrimTab(rtrimTab(std::move(s))); }
+
+std::string StringUtils::ltrim(std::string s)
+{
+	auto it = std::ranges::find_if(s, [](unsigned char c)
+	{
+		// std::locale::classic() include: space (0x20, ' '), form feed (0x0c, '\f'), line feed (0x0a, '\n'),
+		// carriage return (0x0d, '\r'), horizontal tab (0x09, '\t'), vertical tab (0x0b, '\v')
 		return !std::isspace<char>(c, std::locale::classic());
 	});
 	s.erase(s.begin(), it);
@@ -37,9 +111,9 @@ std::string StringUtils::ltrim(std::string s)
 
 std::string StringUtils::rtrim(std::string s)
 {
-	auto it = find_if(s.rbegin(), s.rend(), [](char c)
+	auto it = find_if(s.rbegin(), s.rend(), [](unsigned char c)
 	{
-		return !std::isspace<char>(c, std::locale::classic());
+		return !std::isspace<char>(c, std::locale::classic()) && c != '\n' && c != '\t';
 	});
 	s.erase(it.base(), s.end());
 
@@ -47,78 +121,6 @@ std::string StringUtils::rtrim(std::string s)
 }
 
 std::string StringUtils::trim(std::string s) { return ltrim(rtrim(std::move(s))); }
-
-std::string StringUtils::ltrimNewLineToo(std::string s)
-{
-	auto it = std::ranges::find_if(s, [](char c)
-	{
-		return !std::isspace<char>(c, std::locale::classic()) && c != '\n';
-	});
-	s.erase(s.begin(), it);
-
-	return s;
-}
-
-std::string StringUtils::rtrimNewLineToo(std::string s)
-{
-	auto it = find_if(s.rbegin(), s.rend(), [](char c)
-	{
-		return !std::isspace<char>(c, std::locale::classic()) && c != '\n';
-	});
-	s.erase(it.base(), s.end());
-
-	return s;
-}
-
-std::string StringUtils::trimNewLineToo(std::string s) { return ltrimNewLineToo(rtrimNewLineToo(std::move(s))); }
-
-std::string StringUtils::ltrimTabToo(std::string s)
-{
-	auto it = std::ranges::find_if(s, [](char c)
-	{
-		return !std::isspace<char>(c, std::locale::classic()) && c != '\t';
-	});
-	s.erase(s.begin(), it);
-
-	return s;
-}
-
-std::string StringUtils::rtrimTabToo(std::string s)
-{
-	auto it = find_if(s.rbegin(), s.rend(), [](char c)
-	{
-		return !std::isspace<char>(c, std::locale::classic()) && c != '\t';
-	});
-	s.erase(it.base(), s.end());
-
-	return s;
-}
-
-std::string StringUtils::trimTabToo(std::string s) { return ltrimTabToo(rtrimTabToo(std::move(s))); }
-
-std::string StringUtils::ltrimNewLineAndTabToo(std::string s)
-{
-	auto it = std::ranges::find_if(s, [](char c)
-	{
-		return !std::isspace<char>(c, std::locale::classic()) && c != '\n' && c != '\t';
-	});
-	s.erase(s.begin(), it);
-
-	return s;
-}
-
-std::string StringUtils::rtrimNewLineAndTabToo(std::string s)
-{
-	auto it = find_if(s.rbegin(), s.rend(), [](char c)
-	{
-		return !std::isspace<char>(c, std::locale::classic()) && c != '\n' && c != '\t';
-	});
-	s.erase(it.base(), s.end());
-
-	return s;
-}
-
-std::string StringUtils::trimNewLineAndTabToo(std::string s) { return ltrimNewLineAndTabToo(rtrimNewLineToo(std::move(s))); }
 
 std::string_view StringUtils::trim(const std::string_view sv)
 {
