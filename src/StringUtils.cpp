@@ -96,6 +96,8 @@ std::string StringUtils::rtrimTab(std::string s)
 
 std::string StringUtils::trimTab(std::string s) { return ltrimTab(rtrimTab(std::move(s))); }
 
+// comprende: space (0x20, ' '), form feed (0x0c, '\f'), line feed (0x0a, '\n'),
+// carriage return (0x0d, '\r'), horizontal tab (0x09, '\t'), vertical tab (0x0b, '\v')
 std::string StringUtils::ltrim(std::string s)
 {
 	auto it = std::ranges::find_if(s, [](unsigned char c)
@@ -109,6 +111,8 @@ std::string StringUtils::ltrim(std::string s)
 	return s;
 }
 
+// comprende: space (0x20, ' '), form feed (0x0c, '\f'), line feed (0x0a, '\n'),
+// carriage return (0x0d, '\r'), horizontal tab (0x09, '\t'), vertical tab (0x0b, '\v')
 std::string StringUtils::rtrim(std::string s)
 {
 	auto it = find_if(s.rbegin(), s.rend(), [](unsigned char c)
@@ -120,8 +124,12 @@ std::string StringUtils::rtrim(std::string s)
 	return s;
 }
 
+// comprende: space (0x20, ' '), form feed (0x0c, '\f'), line feed (0x0a, '\n'),
+// carriage return (0x0d, '\r'), horizontal tab (0x09, '\t'), vertical tab (0x0b, '\v')
 std::string StringUtils::trim(std::string s) { return ltrim(rtrim(std::move(s))); }
 
+// comprende: space (0x20, ' '), form feed (0x0c, '\f'), line feed (0x0a, '\n'),
+// carriage return (0x0d, '\r'), horizontal tab (0x09, '\t'), vertical tab (0x0b, '\v')
 std::string_view StringUtils::trim(const std::string_view sv)
 {
 	size_t b = 0, e = sv.size();
