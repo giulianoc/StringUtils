@@ -185,6 +185,21 @@ std::vector<std::string> StringUtils::split(const std::string &str, const char d
 	return result;
 }
 
+std::vector<std::string> StringUtils::split(const std::string_view &str, const char delimiter, const uint8_t limit) {
+	std::vector<std::string> result;
+
+	size_t pos = 0, prev = 0;
+	while ((pos = str.find(delimiter, prev)) != std::string::npos) {
+		result.emplace_back(str.substr(prev, pos - prev));
+		prev = pos + 1;
+		if (limit > 0 && result.size() >= limit - 1)
+			break;
+	}
+	result.emplace_back(str.substr(prev));
+
+	return result;
+}
+
 std::pair<std::string, std::string> StringUtils::splitFirst(const std::string &str, const char delimiter) {
 	auto splits = split(str, delimiter, 2);
 	if (splits.size() == 1)
