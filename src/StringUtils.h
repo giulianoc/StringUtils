@@ -150,9 +150,12 @@ public:
 					errorMessage = std::format("Not a number, value: {}", s);
 				else if (ec == std::errc::result_out_of_range)
 					errorMessage = std::format("Number larger than the type (container), value: {}", s);
-				LOG_ERROR(errorMessage);
 				if (exceptionOnError)
+				{
+					LOG_ERROR(errorMessage);
 					throw std::runtime_error(errorMessage);
+				}
+				LOG_WARN(errorMessage);
 				return defaultValue;
 			}
 			return value;
@@ -173,9 +176,12 @@ public:
 			s: short
 			*/
 			const std::string errorMessage = std::format("Type unknown: {}, value: {}", typeid(T).name(), s);
-			LOG_ERROR(errorMessage);
 			if (exceptionOnError)
+			{
+				LOG_ERROR(errorMessage);
 				throw std::runtime_error(errorMessage);
+			}
+			LOG_WARN(errorMessage);
 			return defaultValue;
 		}
 	}
