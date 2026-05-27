@@ -121,7 +121,7 @@ public:
 	static std::string mapToString(const std::unordered_map<std::string, std::string>& m);
 
 	template <typename T>
-	static T getValue(const std::string &s)
+	static T getValue(const std::string &s, const bool exceptionOnError = true, T defaultValue = {})
 	{
 		if constexpr (std::is_same_v<T, std::string>)
 			return s;
@@ -151,7 +151,9 @@ public:
 				else if (ec == std::errc::result_out_of_range)
 					errorMessage = std::format("Number larger than the type (container), value: {}", s);
 				LOG_ERROR(errorMessage);
-				throw std::runtime_error(errorMessage);
+				if (exceptionOnError)
+					throw std::runtime_error(errorMessage);
+				return defaultValue;
 			}
 			return value;
 		}
@@ -172,7 +174,9 @@ public:
 			*/
 			const std::string errorMessage = std::format("Type unknown: {}, value: {}", typeid(T).name(), s);
 			LOG_ERROR(errorMessage);
-			throw std::runtime_error(errorMessage);
+			if (exceptionOnError)
+				throw std::runtime_error(errorMessage);
+			return defaultValue;
 		}
 	}
 
